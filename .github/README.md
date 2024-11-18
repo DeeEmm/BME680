@@ -15,7 +15,11 @@ This library should also work on other ESP32 Based controllers.
 
 ## Examples
 
-There are three example files included that show basic examples for using this library with I2C, SPI and doft SPI
+There are three example files included that show basic examples for using this library with I2C, SPI and soft SPI
+
+## Status
+
+Work in progress to port code to ESP32
 
 
 ## Issues
