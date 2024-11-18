@@ -1,9 +1,9 @@
 ---
 name: Bug report
 about: Submit a bug report
-title: {Add Short one-line Bug title}
+title: [BUG REPORT]
 labels: bug
-assignees: SV-Zanshin
+assignees: DeeEmm
 
 ---
 
