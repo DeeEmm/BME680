@@ -7,27 +7,13 @@ temperature, pressure and humidity and is described at
 https://www.bosch-sensortec.com/bst/products/all_products/BME680. The datasheet is available from
 Bosch at https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME680_DS001-11.pdf \n\n
 
-The most recent version of the BME680 library is available at https://github.com/Zanduino/BME680
+
+This library is forked from Zanduino and ported to work with the ESP32 as part of the DIY-Flow-Bench 
+project, but should also work on other ESP32 Based controllers.
+
+The original version of the BME680 library is available at https://github.com/Zanduino/BME680
 and the documentation of the library as well as example programs are described in the project's wiki
 pages located at https://github.com/Zanduino/BME680/wiki. \n\n
-
-The BME680 is an extremely small physical package that is so tiny as to be impossible to solder at
-home, hence it will be used as part of a third-party breakout board. There are several such boards
-available at this time, for example \n
-| Company  | Link       |
-| -------  | ---------- |
-| Sparkfun | https://www.sparkfun.com/products/14570 |
-| BlueDot  | https://www.bluedot.space/sensor-boards/bme680/ |
-| Adafruit |
-https://learn.adafruit.com/adafruit-BME680-humidity-barometric-pressure-temperature-sensor-breakout
-|
-\n\n
-
-Bosch supplies sample software that runs on various platforms, including the Arduino family; this
-can be downloaed at https://github.com/BoschSensortec/BSEC-Arduino-library . This software is part
-of the Bosch "BSEC" (Bosch Sensortec Environmental Cluster) framework and somewhat bulky and
-unwieldy for typical Arduino applications, hence the choice to make a more compact and rather less
-abstract library.
 
 This example program initializes the BME680 to use I2C for communications. The library does not
 using floating point numbers to save on memory space and computation time. The values for
@@ -53,21 +39,29 @@ FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. 
 received a copy of the GNU General Public License along with this program.  If not, see
 <http://www.gnu.org/licenses/>.
 
+
 @section I2CDemoauthor Author
 
 Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
+Ported for ESP32 by DeeEmm deeemm@deeemm.com> at https://www.github.com/DeeEmm
 
-@section I2CDemoversions Changelog
 
-| Version | Date       | Developer  | Comments
-| ------- | ---------- | ---------- | ------------------------------------------------------------ |
-| 1.0.3   | 2020-07-04 | SV-Zanshin | Issue #25 implement clang-formatting                         |
-| 1.0.2   | 2020-05-09 | SV-Zanshin | Issue #8  clean up comments and code                         |
-| 1.0.1   | 2019-01-30 | SV-Zanshin |           Removed old comments                               |
-| 1.0.1   | 2019-01-26 | SV-Zanshin | Issue #3  convert documentation to Doxygen                   |
-| 1.0.0b  | 2018-06-30 | SV-Zanshin |           Cloned from original BME280 program                |
+Version Info
+---------------------------------------------------------------------------------------------------
+Version numbers follow format:  Maj . Minor . Build 
+Build numbers follow format: YY MM DD VV Where VV is the incremental daily version
+
+!! Most recent entry at top !!
+
+Version #               - Description of Change
+---------------------------------------------------------------------------------------------------
+
+
+V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
+
+
 */
-#include "Zanshin_BME680.h"  // Include the BME680 Sensor library
+#include "DeeEmm_BME680.h"  // Include the BME680 Sensor library
 /**************************************************************************************************
 ** Declare all program constants                                                                 **
 **************************************************************************************************/

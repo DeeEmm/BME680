@@ -1,0 +1,12 @@
+Version Info
+---------------------------------------------------------------------------------------------------
+Version numbers follow format:  Maj . Minor . Build 
+Build numbers follow format: YY MM DD VV Where VV is the incremental daily version
+
+!! Most recent entry at top !!
+
+Version #               - Description of Change
+---------------------------------------------------------------------------------------------------
+
+
+V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]

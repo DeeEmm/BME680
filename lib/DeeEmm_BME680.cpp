@@ -5,7 +5,7 @@
     See the main library header file for all details
 */
 
-#include "Zanshin_BME680.h"  // Include the library header definition
+#include "DeeEmm_BME680.h"  // Include the library header definition
 
 /***************************************************************************************************
 ** Declare class-internal and not publically visible constants                                    **

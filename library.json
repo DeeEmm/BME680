@@ -1,0 +1,13 @@
+{
+    "name": "DeeEmm BME680",
+    "keywords": "sensor, bme, 680",
+    "description": "A cut down library to drive the Bosch BME680 environmental sensor using I2C.",
+    "repository":
+    {
+      "type": "git",
+      "url": "https://github.com/DeeEmm/BME680.git"
+    },
+    "version": "1.0.0",
+    "frameworks": "ESP32",
+    "platforms": "*"
+}

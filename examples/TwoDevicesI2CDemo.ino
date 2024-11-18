@@ -7,33 +7,12 @@ temperature, pressure, humidity and air quality and are described at
 https://www.bosch-sensortec.com/bst/products/all_products/BME680. The datasheet is available from
 Bosch at https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME680_DS001-11.pdf \n\n
 
+This library is forked from Zanduino and ported to work with the ESP32 as part of the DIY-Flow-Bench 
+project, but should also work on other ESP32 Based controllers.
+
 The most recent version of the BME680 library is available at https://github.com/Zanduino/BME680
 and the documentation of the library as well as example programs are described in the project's wiki
 pages located at https://github.com/Zanduino/BME680/wiki. \n\n
-
-The BME680 is an extremely small physical package that is so tiny as to be impossible to solder at
-home, hence it will be used as part of a third-party breakout board. There are several such boards
-available at this time, for example \n Company  | Link
--------  | ----------
-Sparkfun | https://www.sparkfun.com/products/14570
-BlueDot  | https://www.bluedot.space/sensor-boards/bme680/
-Adafruit |
-https://learn.adafruit.com/adafruit-BME680-humidity-barometric-pressure-temperature-sensor-breakout
-\n\n
-
-Bosch supplies sample software that runs on various platforms, including the Arduino family; this
-can be downloaed at https://github.com/BoschSensortec/BSEC-Arduino-library . This software is part
-of the Bosch "BSEC" (Bosch Sensortec Environmental Cluster) framework and somewhat bulky and
-unwieldy for typical Arduino applications, hence the choice to make a more compact and rather less
-abstract library.
-
-This example program explicitly initializes each BME680 - one at address 0x76 and the other at 0x77.
-The BME680s are initialized in separate library instances. The library does not using floating point
-numbers to save on memory space and computation time. The values for Temperature, Pressure and
-Humidity are returned in deci-units, e.g. a Temperature reading of "2731" means "27.31" degrees
-Celsius.\n The program measures only the temperature and humidity on the two devices and outputs the
-values.
-\n\n
 
 @section TwoDevicesI2CDemolicense License
 
@@ -48,15 +27,25 @@ received a copy of the GNU General Public License along with this program.  If n
 @section TwoDevicesI2CDemoauthor Author
 
 Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
+Ported for ESP32 by DeeEmm deeemm@deeemm.com> at https://www.github.com/DeeEmm
 
-@section TwoDevicesI2CDemoversions Changelog
 
-Version | Date       | Developer  | Comments
-------- | ---------- | ---------- | ---------------------------------------------------------------
-1.0.3   | 2020-07-05 | SV-Zanshin | Issue #25 - implement clang-formatting
-1.0.0   | 2020-05-16 | SV-Zanshin | Issue #11. Cloned and adapted from I2CDemo.ino
+Version Info
+---------------------------------------------------------------------------------------------------
+Version numbers follow format:  Maj . Minor . Build 
+Build numbers follow format: YY MM DD VV Where VV is the incremental daily version
+
+!! Most recent entry at top !!
+
+Version #               - Description of Change
+---------------------------------------------------------------------------------------------------
+
+
+V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
+
 */
-#include "Zanshin_BME680.h"  // Include the BME680 Sensor library
+
+#include "DeeEmm_BME680.h"  // Include the BME680 Sensor library
 /**************************************************************************************************
 ** Declare all program constants                                                                 **
 **************************************************************************************************/

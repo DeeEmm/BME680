@@ -1,60 +1,26 @@
 // clang-format off
 /*! @file Zanshin_BME680.h
 
-@mainpage Arduino Library to access and control a Bosch BME680 Environmental Sensor
+@mainpage ESP32 Library to access and control a Bosch BME680 Environmental Sensor
 
-@section Zanshin_BME680_section Description
+
+This library is forked from Zanduino and ported to work with the ESP32 as part of the DIY-Flow-Bench 
+project, but should also work on other ESP32 Based controllers.
+
+The original version of the BME680 library is available at https://github.com/Zanduino/BME680
+and the documentation of the library as well as example programs are described in the project's wiki
+pages located at https://github.com/Zanduino/BME680/wiki. \n\n
+=
+
+The BME680 can use either SPI or I2C for communications. This library supports I2C at various bus
+speeds as well as SPI using either the standard Arduino hardware SPI or software SPI. Depending upon
+the pin configuration a BME680 can have 2 distinct I2C addresses - either 0x76 or 0x77.\n\n
 
 Class definition header for the Bosch BME680 temperature / humidity / pressure / air quality sensor.
 The device is described at https://www.bosch-sensortec.com/bst/products/all_products/BME680 and the
 datasheet is available from Bosch at
 https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME680-DS001-00.pdf
 \n\n
-
-The BME680 can use either SPI or I2C for communications. This library supports I2C at various bus
-speeds as well as SPI using either the standard Arduino hardware SPI or software SPI. Depending upon
-the pin configuration a BME680 can have 2 distinct I2C addresses - either 0x76 or 0x77.\n\n
-
-The most recent version of the library is available at https://github.com/Zanduino/BME680 and
-extensive documentation of the library as well as descriptions of the various example programs are
-described in the project's wiki pages located at https://github.com/Zanduino/BME680/wiki
-\n
-The BME680 is an extremely small physical package that is so tiny as to be impossible to solder at
-home, hence it will be used as part of a third-party breakout board. There are several such boards
-available at this time, for example:\n
-
-Company  | Link
--------  | ----------
-SparkFun | https://www.sparkfun.com/products/14570
-BlueDot  | https://www.bluedot.space/sensor-boards/bme680/
-Adafruit |
-https://learn.adafruit.com/adafruit-BME680-humidity-barometric-pressure-temperature-sensor-breakout
-
-\n
-Bosch supplies sample software that runs on various platforms, including the Arduino family; this
-can be downloaded at https://github.com/BoschSensortec/BSEC-Arduino-library. This software is part
-of the Bosch "BSEC" (Bosch Sensortec Environmental Cluster) framework and is somewhat bulky and
-rather unwieldy for typical Arduino applications, it won't run on most Arduinos and the only example
-is for the Arduino Mega 2560 (due to the memory required), hence the decision to make this compact
-and rather less abstract library that will run on typical Arduino hardware.
-
-@section doxygen doxygen configuration
-
-This library is built with the standard "Doxyfile", which is located at
-https://github.com/Zanduino/Common/blob/main/Doxygen. As described on that page, there are only 5
-environment variables used, and these are set in the project's actions file, located at
-https://github.com/Zanduino/BME680/blob/master/.github/workflows/ci-doxygen.yml
-Edit this file and set the 5 variables -  PRETTYNAME, PROJECT_NAME, PROJECT_NUMBER, PROJECT_BRIEF
-and PROJECT_LOGO so that these values are used in the doxygen documentation.
-The local copy of the doxyfile should be in the project's root directory in order to do local
-doxygen testing, but the file is ignored on upload to GitHub.
-
-@section clang-format
-Part of the GitHub actions for CI is running every source file through "clang-format" to ensure
-that coding formatting is done the same for all files. The configuration file ".clang-format" is
-located at https://github.com/Zanduino/Common/tree/main/clang-format and this is used for CI tests
-when pushing to GitHub. The local file, if present in the root directory, is ignored when
-committing and uploading.
 
 @section license GNU General Public License v3.0
 
@@ -69,37 +35,23 @@ have received a copy of the GNU General Public License along with this program. 
 @section author Author
 
 Written by Arnd <Arnd@Zanduino.Com> at https://www.github.com/SV-Zanshin
+Ported for ESP32 by DeeEmm deeemm@deeemm.com> at https://www.github.com/DeeEmm
 
-@section versions Changelog
 
-Version | Date       | Developer  | Comments
-------- | ---------- | ---------- | ---------------------------------------------------------------
-1.0.11  | 2020-12-03 | SV-Zanshin | New branch - no changes yet
-1.0.10  | 2020-12-03 | SV-Zanshin | Issue #34 Enhancements from Alain2019 - added measurement functionality
-1.0.10  | 2020-12-02 | SV-Zanshin | Issue #33 Optimize library code for size, performance, initializers
-1.0.10  | 2020-10-19 | Alain2019  | Issue #32 Change division to bit shifts for clarity
-1.0.10  | 2020-10-10 | Alain2019  | Issue #31 Incorrect computation of _H1 and _H2
-1.0.9   | 2020-09-27 | SV-Zanshin | Issue #26 added return status for getSensorData
-1.0.9   | 2020-09-27 | SV-Zanshin | Issue #26 Corrected computation of gas heater resistance value
-1.0.9   | 2020-06-28 | SV-Zanshin | Issue #25 Reformat according to standard c++ style
-1.0.8   | 2020-06-20 | SV-Zanshin | Issue #22 added "getI2CAddress()" function
-1.0.6   | 2020-05-25 | SV-Zanshin | Issue #17 return value for "setOversampling()"
-1.0.6   | 2020-05-25 | SV-Zanshin | Issue #16 I2C "reset()" when using 2 devices
-1.0.6   | 2020-05-25 | SV-Zanshin |           General formatting of comments and spell-checking
-1.0.6   | 2020-05-24 | SV-Zanshin | Issue #14 Humidity sometimes 100% despite turning on
-1.0.6   | 2020-05-24 | SV-Zanshin | Issue #15 Pressure & Temperature oversampling switched
-1.0.5   | 2020-05-21 | SV-Zanshin | Issue #12 First call to getSensorData() returns invalid data
-1.0.4   | 2020-05-14 | SV-Zanshin | Issue  #9 Allow 2 devices when using I2C
-1.0.4   | 2020-05-14 | SV-Zanshin | Issue  #9 Allow 2 devices when using I2C
-1.0.3   | 2020-05-09 | SV-Zanshin | Issue  #5 Adjust readings. Subsequently removed code again
-1.0.3   | 2020-05-09 | SV-Zanshin | Issue  #8 clean up comments and code
-1.0.2   | 2019-01-26 | SV-Zanshin | Issue  #3 Converted documentation to doxygen style
-1.0.1   | 2018-07-22 | SV-Zanshin |           Corrected I2C datatypes
-1.0.1   | 2018-07-03 | SV-Zanshin | Issue  #1 Added waitForReading and param to getSensorData()
-1.0.0   | 2018-07-02 | SV-Zanshin |           Added guard code against multiple I2C constants defs
-1.0.0   | 2018-07-01 | SV-Zanshin |           Added and tested I2C, SPI and soft-SPI connections
-1.0.0a  | 2018-06-30 | SV-Zanshin |           Cloned from BME280 library and started recoding
+Version Info
+---------------------------------------------------------------------------------------------------
+Version numbers follow format:  Maj . Minor . Build 
+Build numbers follow format: YY MM DD VV Where VV is the incremental daily version
+
+!! Most recent entry at top !!
+
+Version #               - Description of Change
+---------------------------------------------------------------------------------------------------
+
+
+V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
 */
+
 // clang-format on
 #include <SPI.h>   // Standard SPI library
 #include <Wire.h>  // Standard I2C "Wire" library
