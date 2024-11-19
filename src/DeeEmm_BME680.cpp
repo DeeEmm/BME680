@@ -1,5 +1,5 @@
-/*! @file Zanshin_BME680.cpp
-    @section Zanshin_BME680_intro_section Description
+/*! @file DeeEmm_BME680.cpp
+    @section DeeEmm_BME680_intro_section Description
 
     Arduino Library for the Bosch BME680 sensor\n\n
     See the main library header file for all details

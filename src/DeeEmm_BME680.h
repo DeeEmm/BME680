@@ -1,5 +1,4 @@
-// clang-format off
-/*! @file Zanshin_BME680.h
+/*! @file DeeEmm_BME680.h
 
 @mainpage ESP32 Library to access and control a Bosch BME680 Environmental Sensor
 
@@ -52,7 +51,6 @@ Version #               - Description of Change
 V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
 */
 
-// clang-format on
 #include <SPI.h>   // Standard SPI library
 #include <Wire.h>  // Standard I2C "Wire" library
 
