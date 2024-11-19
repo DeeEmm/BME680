@@ -24,4 +24,4 @@ Work in progress to port code to ESP32
 
 ## Issues
 
-Please report all issues to 
+Please report all issues to bugtracker
