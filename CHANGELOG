@@ -9,4 +9,7 @@ Version #               - Description of Change
 ---------------------------------------------------------------------------------------------------
 
 
+V 1.0.24112002          - Refactor
+V 1.0.24112001          - Conversion to PlatformIO project
+V 1.0.24111901          - Code Tidy
 V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]

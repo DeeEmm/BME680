@@ -21,9 +21,9 @@ const uint8_t BME680_MEASURING_BIT_POSITION{5};        ///< Bit position for mea
 const uint8_t BME680_I2C_MIN_ADDRESS{0x76};            ///< Minimum possible address for BME680
 const uint8_t BME680_I2C_MAX_ADDRESS{0x77};            ///< Minimum possible address for BME680
 const uint8_t BME680_SPI_MEM_PAGE_POSITION{4};         ///< Bit position for memory page value
-const uint8_t BME680_HUMIDITY_MASK{0xF8};              ///< Mask is binary B11111000
-const uint8_t BME680_PRESSURE_MASK{0xE3};              ///< Mask is binary B11100011
-const uint8_t BME680_TEMPERATURE_MASK{0x1F};           ///< Mask is binary B00011111
+const uint8_t BME680_HUMIDITY_MASK{0xF8};              ///< Mask is binary 0b11111000
+const uint8_t BME680_PRESSURE_MASK{0xE3};              ///< Mask is binary 0b11100011
+const uint8_t BME680_TEMPERATURE_MASK{0x1F};           ///< Mask is binary 0b00011111
 
 /***************************************************************************************************
 ** Declare the constants used for calibration                                                     **
@@ -237,12 +237,8 @@ void BME680_Class::getCalibration() {
   /**********************************
   ** Humidity related coefficients **
   **********************************/
-  _H1 = (uint16_t)(
-      ((uint16_t)coeff_arr2[BME680_H1_MSB_REG] << BME680_HUM_REG_SHIFT_VAL) |
-      ((coeff_arr2[BME680_H1_LSB_REG] >> BME680_HUM_REG_SHIFT_VAL) & BME680_BIT_H1_DATA_MSK));
-  _H2 = (uint16_t)(
-      ((uint16_t)coeff_arr2[BME680_H2_MSB_REG] << BME680_HUM_REG_SHIFT_VAL) |
-      ((coeff_arr2[BME680_H2_LSB_REG] >> BME680_HUM_REG_SHIFT_VAL) & BME680_BIT_H1_DATA_MSK));
+  _H1 = (uint16_t)(((uint16_t)coeff_arr2[BME680_H1_MSB_REG] << BME680_HUM_REG_SHIFT_VAL) | ((coeff_arr2[BME680_H1_LSB_REG] >> BME680_HUM_REG_SHIFT_VAL) & BME680_BIT_H1_DATA_MSK));
+  _H2 = (uint16_t)(((uint16_t)coeff_arr2[BME680_H2_MSB_REG] << BME680_HUM_REG_SHIFT_VAL) | ((coeff_arr2[BME680_H2_LSB_REG] >> BME680_HUM_REG_SHIFT_VAL) & BME680_BIT_H1_DATA_MSK));
   _H3 = (int8_t)coeff_arr2[BME680_H3_REG];
   _H4 = (int8_t)coeff_arr2[BME680_H4_REG];
   _H5 = (int8_t)coeff_arr2[BME680_H5_REG];
@@ -315,8 +311,7 @@ uint8_t BME680_Class::setOversampling(const uint8_t sensor, const uint8_t sampli
       } else {
         tempRegister &= BME680_TEMPERATURE_MASK;  // Mask bits to 0
         tempRegister |= (sampling << 5);          // Add in the sampling bits at offset
-        putData(BME680_CONTROL_MEASURE_REGISTER,
-                (uint8_t)tempRegister);  // Update humidity bits 5:7
+        putData(BME680_CONTROL_MEASURE_REGISTER, (uint8_t)tempRegister);  // Update humidity bits 5:7
       }                                  // if-then return current value or set new value
       break;
     }                           
@@ -333,11 +328,11 @@ uint8_t BME680_Class::setIIRFilter(const uint8_t iirFilterSetting) const {
   uint8_t returnValue = readByte(BME680_CONFIG_REGISTER);  // Get control register byte contents
   if (iirFilterSetting != UINT8_MAX)                       // If the value is to be changed
   {                                                        //
-    returnValue = returnValue & B11100011;                 // mask IIR bits
-    returnValue |= (iirFilterSetting & B00000111) << 2;    // use 3 bits of iirFilterSetting
+    returnValue = returnValue & 0b11100011;                 // mask IIR bits
+    returnValue |= (iirFilterSetting & 0b00000111) << 2;    // use 3 bits of iirFilterSetting
     putData(BME680_CONFIG_REGISTER, returnValue);          // Write new control register value
   }                                    //
-  returnValue = (returnValue >> 2) & B00000111;  // Extract IIR filter setting from register
+  returnValue = (returnValue >> 2) & 0b00000111;  // Extract IIR filter setting from register
   return (returnValue);                          // Return IIR Filter setting
 }
 
@@ -373,6 +368,7 @@ uint8_t BME680_Class::readSensors(const bool waitSwitch) {
       UINT32_C(2147483647), UINT32_C(2126008810), UINT32_C(2147483647), UINT32_C(2130303777),
       UINT32_C(2147483647), UINT32_C(2147483647), UINT32_C(2143188679), UINT32_C(2136746228),
       UINT32_C(2147483647), UINT32_C(2126008810), UINT32_C(2147483647), UINT32_C(2147483647)};
+
   const uint32_t lookupTable2[16] = {
       UINT32_C(4096000000), UINT32_C(2048000000), UINT32_C(1024000000), UINT32_C(512000000),
       UINT32_C(255744255),  UINT32_C(127110228),  UINT32_C(64000000),   UINT32_C(32258064),
@@ -387,14 +383,10 @@ uint8_t BME680_Class::readSensors(const bool waitSwitch) {
 
   if (waitSwitch) waitForReadings();      // Doesn't return until the readings are finished
   getData(BME680_STATUS_REGISTER, buff);  // read all 15 bytes in one go
-  adc_pres = (uint32_t)(((uint32_t)buff[2] << 12) | ((uint32_t)buff[3] << 4) |
-                        ((uint32_t)buff[4] >> 4));  // put the 3 bytes of Pressure
-  adc_temp = (uint32_t)(((uint32_t)buff[5] << 12) | ((uint32_t)buff[6] << 4) |
-                        ((uint32_t)buff[7] >> 4));  // put the 3 bytes of Temperature
-  adc_hum =
-      (uint16_t)(((uint32_t)buff[8] << 8) | (uint32_t)buff[9]);  // put the 2 bytes of Humidity
-  adc_gas_res =
-      (uint16_t)((uint32_t)buff[13] << 2 | (((uint32_t)buff[14]) >> 6));  // put the 2 bytes of Gas
+  adc_pres = (uint32_t)(((uint32_t)buff[2] << 12) | ((uint32_t)buff[3] << 4) | ((uint32_t)buff[4] >> 4));  // put the 3 bytes of Pressure
+  adc_temp = (uint32_t)(((uint32_t)buff[5] << 12) | ((uint32_t)buff[6] << 4) | ((uint32_t)buff[7] >> 4));  // put the 3 bytes of Temperature
+  adc_hum =  (uint16_t)(((uint32_t)buff[8] << 8) | (uint32_t)buff[9]);  // put the 2 bytes of Humidity
+  adc_gas_res = (uint16_t)((uint32_t)buff[13] << 2 | (((uint32_t)buff[14]) >> 6));  // put the 2 bytes of Gas
   gas_range = buff[14] & 0X0F;                                            // Retrieve the range
   
   //*******************************//
@@ -414,8 +406,7 @@ uint8_t BME680_Class::readSensors(const bool waitSwitch) {
   var2 = ((((var1 >> 2) * (var1 >> 2)) >> 11) * (int32_t)_P6) >> 2;
   var2 = var2 + ((var1 * (int32_t)_P5) << 1);
   var2 = (var2 >> 2) + ((int32_t)_P4 << 16);
-  var1 = (((((var1 >> 2) * (var1 >> 2)) >> 13) * ((int32_t)_P3 << 5)) >> 3) +
-         (((int32_t)_P2 * var1) >> 1);
+  var1 = (((((var1 >> 2) * (var1 >> 2)) >> 13) * ((int32_t)_P3 << 5)) >> 3) + (((int32_t)_P2 * var1) >> 1);
   var1      = var1 >> 18;
   var1      = ((32768 + var1) * (int32_t)_P1) >> 15;
   _Pressure = 1048576 - adc_pres;
@@ -427,23 +418,16 @@ uint8_t BME680_Class::readSensors(const bool waitSwitch) {
     _Pressure = ((_Pressure << 1) / (uint32_t)var1);
   var1 = ((int32_t)_P9 * (int32_t)(((_Pressure >> 3) * (_Pressure >> 3)) >> 13)) >> 12;
   var2 = ((int32_t)(_Pressure >> 2) * (int32_t)_P8) >> 13;
-  var3 = ((int32_t)(_Pressure >> 8) * (int32_t)(_Pressure >> 8) * (int32_t)(_Pressure >> 8) *
-          (int32_t)_P10) >>
-         17;
+  var3 = ((int32_t)(_Pressure >> 8) * (int32_t)(_Pressure >> 8) * (int32_t)(_Pressure >> 8) * (int32_t)_P10) >> 17;
   _Pressure = (int32_t)(_Pressure) + ((var1 + var2 + var3 + ((int32_t)_P7 << 7)) >> 4);
 
   //**********************//
   // Compute the humidity //
   //**********************//
   temp_scaled = (((int32_t)_tfine * 5) + 128) >> 8;
-  var1        = (int32_t)(adc_hum - ((int32_t)((int32_t)_H1 << 4))) -
-         (((temp_scaled * (int32_t)_H3) / ((int32_t)100)) >> 1);
+  var1        = (int32_t)(adc_hum - ((int32_t)((int32_t)_H1 << 4))) - (((temp_scaled * (int32_t)_H3) / ((int32_t)100)) >> 1);
   var2 =
-      ((int32_t)_H2 *
-       (((temp_scaled * (int32_t)_H4) / ((int32_t)100)) +
-        (((temp_scaled * ((temp_scaled * (int32_t)_H5) / ((int32_t)100))) >> 6) / ((int32_t)100)) +
-        (int32_t)(1 << 14))) >>
-      10;
+      ((int32_t)_H2 * (((temp_scaled * (int32_t)_H4) / ((int32_t)100)) + (((temp_scaled * ((temp_scaled * (int32_t)_H5) / ((int32_t)100))) >> 6) / ((int32_t)100)) + (int32_t)(1 << 14))) >> 10;
   var3      = var1 * var2;
   var4      = (int32_t)_H6 << 7;
   var4      = ((var4) + ((temp_scaled * (int32_t)_H7) / ((int32_t)100))) >> 4;
@@ -484,8 +468,8 @@ bool BME680_Class::setGas(uint16_t GasTemp, uint16_t GasMillis) const {
   uint8_t gasRegister = readByte(BME680_CONTROL_GAS_REGISTER2);  // Read current register values
   if (GasTemp == 0 || GasMillis == 0) {
     // If either input variable is zero //
-    putData(BME680_CONTROL_GAS_REGISTER1, (uint8_t)B00001000);  // Turn off gas heater
-    putData(BME680_CONTROL_GAS_REGISTER2, (uint8_t)(gasRegister & B11101111));  // Turn off gas measurements
+    putData(BME680_CONTROL_GAS_REGISTER1, (uint8_t)0b00001000);  // Turn off gas heater
+    putData(BME680_CONTROL_GAS_REGISTER2, (uint8_t)(gasRegister & 0b11101111));  // Turn off gas measurements
   } else {
     putData(BME680_CONTROL_GAS_REGISTER1, (uint8_t)0);  // Turn off heater bit to turn on
     uint8_t heatr_res;
@@ -536,5 +520,6 @@ void BME680_Class::triggerMeasurement() const {
    * @brief Trigger a new measurement on the BME680
    */
   uint8_t workRegister = readByte(BME680_CONTROL_MEASURE_REGISTER);  // Read the control measure
+
   putData(BME680_CONTROL_MEASURE_REGISTER, (uint8_t)(workRegister | 1));  // Trigger start of next measurement
 }  

@@ -54,18 +54,7 @@ Ported for ESP32 by DeeEmm deeemm@deeemm.com> at https://www.github.com/DeeEmm
 
 Version Info
 ---------------------------------------------------------------------------------------------------
-Version numbers follow format:  Maj . Minor . Build 
-Build numbers follow format: YY MM DD VV Where VV is the incremental daily version
-
-!! Most recent entry at top !!
-
-
-Version #               - Description of Change
----------------------------------------------------------------------------------------------------
-
-V 1.0.24112001          - Conversion to PlatformIO project
-V 1.0.24111901          - Code Tidy
-V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
+See changelog
 
 
 */
@@ -113,7 +102,8 @@ void setup(void) {
   BME680.setIIRFilter(IIR4);  // Use enumerated type values
 
   Serial.print(F("- Setting gas measurement to 320\xC2\xB0\x43 for 150ms\n"));  // "�C" symbols
-  BME680.setGas(320, 150);  // 320�c for 150 milliseconds
+  // BME680.setGas(320, 150);  // 320�c for 150 milliseconds
+  BME680.setGas(0, 0); // Turns off gas measurements
 }  
 
 
