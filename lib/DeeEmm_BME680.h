@@ -1,15 +1,13 @@
-/*! @file DeeEmm_BME680.h
+/* DeeEmm_BME680.h
 
 @mainpage ESP32 Library to access and control a Bosch BME680 Environmental Sensor
-
 
 This library is forked from Zanduino and ported to work with the ESP32 as part of the DIY-Flow-Bench 
 project, but should also work on other ESP32 Based controllers.
 
 The original version of the BME680 library is available at https://github.com/Zanduino/BME680
 and the documentation of the library as well as example programs are described in the project's wiki
-pages located at https://github.com/Zanduino/BME680/wiki. \n\n
-=
+pages located at https://github.com/Zanduino/BME680/wiki. 
 
 The BME680 can use either SPI or I2C for communications. This library supports I2C at various bus
 speeds as well as SPI using either the standard Arduino hardware SPI or software SPI. Depending upon
@@ -51,36 +49,35 @@ Version #               - Description of Change
 V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
 */
 
-#include <SPI.h>   // Standard SPI library
-#include <Wire.h>  // Standard I2C "Wire" library
-
-#include "Arduino.h"  // Arduino data type definitions
+#include <SPI.h>   
+#include <Wire.h>  
+#include "Arduino.h"  
 
 #ifndef BME680_h
-  #define BME680_h  ///< Guard code definition for the header
-  #define CONCAT_BYTES(msb, lsb) \
-    (((uint16_t)msb << 8) | (uint16_t)lsb)  ///< combine msb & lsb bytes
-  #ifndef _BV
-    #define _BV(bit) (1 << (bit))  ///< This macro isn't pre-defined on all platforms
-  #endif
-  /***************************************************************************************************
-  ** Declare publically visible constants used in the class **
-  ***************************************************************************************************/
-  #ifndef I2C_MODES                           //   If the I2C_Modes haven't been declared yet
-    #define I2C_MODES                         ///< Guard code definition for the I2C modes
+#define BME680_h
+#define CONCAT_BYTES(msb, lsb) \
+  (((uint16_t)msb << 8) | (uint16_t)lsb)  ///< combine msb & lsb bytes
+#ifndef _BV
+  #define _BV(bit) (1 << (bit))  ///< This macro isn't pre-defined on all platforms
+#endif
+
+/***************************************************************************************************
+** Declare publically visible constants used in the class **
+***************************************************************************************************/
+#ifndef I2C_MODES                           
+#define I2C_MODES                        
 const uint32_t I2C_STANDARD_MODE{100000};     ///< Default normal I2C 100KHz speed
 const uint32_t I2C_FAST_MODE{400000};         ///< Fast mode
 const uint32_t I2C_FAST_MODE_PLUS{1000000};   ///< Really fast mode
 const uint32_t I2C_HIGH_SPEED_MODE{3400000};  ///< Turbo mode
-  #endif
+#endif
+
 const uint32_t SPI_HERZ{500000};  ///< SPI speed in Hz
 
 /***************************************************************************************************
 ** Declare enumerated types used in the class                                                     **
 ***************************************************************************************************/
-/*! @brief  Enumerate the sensor type */
 enum sensorTypes { TemperatureSensor, HumiditySensor, PressureSensor, GasSensor, UnknownSensor };
-/*! @brief  Enumerate the Oversampling types */
 enum oversamplingTypes {
   SensorOff,
   Oversample1,
@@ -90,14 +87,15 @@ enum oversamplingTypes {
   Oversample16,
   UnknownOversample
 };
-/*! @brief  Enumerate the iir filter types */
 enum iirFilterTypes { IIROff, IIR2, IIR4, IIR8, IIR16, IIR32, IIR64, IIR128, UnknownIIR };
+
 
 class BME680_Class {
   /*!
    * @class BME680_Class
    * @brief Main BME680 class for the temperature / humidity / pressure sensor
    */
+
  public:
   BME680_Class();                           // Class constructor (unused)
   ~BME680_Class();                          // Class destructor (unused)
@@ -105,19 +103,16 @@ class BME680_Class {
   bool    begin(const uint32_t i2cSpeed);   // I2C with a non-default speed
   bool    begin(const uint8_t chipSelect);  // Start using either I2C or HW-SPI
   bool    begin(const uint32_t i2cSpeed, const uint8_t i2cAddress);  // Set speed and I2C Addr.
-  bool    begin(const uint8_t chipSelect, const uint8_t mosi,        // Start using software SPI
-                const uint8_t miso, const uint8_t sck);
-  uint8_t setOversampling(const uint8_t sensor,  // Set enum sensorType Oversampling
-                          const uint8_t sampling = UINT8_MAX) const;  // and return current value
+  bool    begin(const uint8_t chipSelect, const uint8_t mosi, const uint8_t miso, const uint8_t sck);
+  uint8_t setOversampling(const uint8_t sensor, const uint8_t sampling = UINT8_MAX) const;  // and return current value
   bool    setGas(uint16_t GasTemp, uint16_t GasMillis) const;  // Gas heating temperature and time
   uint8_t setIIRFilter(const uint8_t iirFilterSetting = UINT8_MAX) const;  // Set IIR Filter
-  uint8_t getSensorData(int32_t &temp, int32_t &hum,    // get most recent readings
-                        int32_t &press, int32_t &gas,   //
-                        const bool waitSwitch = true);  //
+  uint8_t getSensorData(int32_t &temp, int32_t &hum,  int32_t &press, int32_t &gas,  const bool waitSwitch = true);  //
   uint8_t getI2CAddress() const;                        // Return the I2C Address of the BME680
   void    reset();                                      // Reset the BME680
   bool    measuring() const;                            ///< true if currently measuring
   void    triggerMeasurement() const;                   ///< trigger a measurement
+
  private:                                               //
   bool     commonInitialization();                      ///< Common initialization code
   uint8_t  readByte(const uint8_t addr) const;          ///< Read byte from register address
@@ -147,8 +142,8 @@ class BME680_Class {
    currently not used in the library directly, but the function "readByte()" is used which calls
    the getData().  The "putData()" is called directly in the code.
   */
-  template <typename T>
-  uint8_t &getData(const uint8_t addr, T &value) const {
+
+  template <typename T> uint8_t &getData(const uint8_t addr, T &value) const {
     /*!
       @brief     Template for reading from I2C or SPI using any data type
       @details   As a template it can support compile-time data type definitions
@@ -156,6 +151,7 @@ class BME680_Class {
       @param[in] value Data Type "T" to read
       @return    Size of data read in bytes
     */
+   
     uint8_t *      bytePtr    = (uint8_t *)&value;  // Pointer to structure beginning
     static uint8_t structSize = sizeof(T);          // Number of bytes in structure
     if (_I2CAddress)                                // Using I2C if address is non-zero
@@ -165,13 +161,10 @@ class BME680_Class {
       Wire.endTransmission();                       // Close transmission
       Wire.requestFrom(_I2CAddress, sizeof(T));     // Request 1 byte of data
       structSize = Wire.available();                // Use the actual number of bytes
-      for (uint8_t i = 0; i < structSize; i++)
-        *bytePtr++ = Wire.read();  // loop for each byte to be read
-    }                              //
-    else                           //
-    {                              //
-      if (_sck == 0)               // if sck is zero then hardware SPI
-      {                            //
+      for (uint8_t i = 0; i < structSize; i++)  *bytePtr++ = Wire.read();  // loop for each byte to be read
+    } else {     
+
+      if (_sck == 0)  { 
         SPI.beginTransaction(
             SPISettings(SPI_HERZ, MSBFIRST, SPI_MODE0));  // Start the SPI transaction
         digitalWrite(_cs, LOW);                           // Tell BME680 to listen up
@@ -180,21 +173,20 @@ class BME680_Class {
           *bytePtr++ = SPI.transfer(0);  // loop for each byte to be read
         digitalWrite(_cs, HIGH);         // Tell BME680 to stop listening
         SPI.endTransaction();            // End the transaction
+
       } else {                           // otherwise we are using soft SPI
+
         int8_t  i, j;                    // Loop variables
         uint8_t reply;                   // return byte for soft SPI transfer
         digitalWrite(_cs, LOW);          // Tell BME680 to listen up
-        for (j = 7; j >= 0; j--)         // First send the address byte
-        {
+
+        for (j = 7; j >= 0; j--)  {
           digitalWrite(_sck, LOW);                          // set the clock signal
           digitalWrite(_mosi, ((addr) | 0x80) & (1 << j));  // set the MOSI pin state
           digitalWrite(_sck, HIGH);                         // reset the clock signal
-        }                                                   // of for-next each bit
-        for (i = 0; i < structSize; i++)                    // Loop for each byte to read
-        {                                                   //
+        }  for (i = 0; i < structSize; i++) {
           reply = 0;                                        // reset our return byte
-          for (j = 7; j >= 0; j--)                          // Now read the data at that byte
-          {                                                 //
+          for (j = 7; j >= 0; j--)  {                                                 
             reply <<= 1;                                    // shift buffer one bit left
             digitalWrite(_sck, LOW);                        // set and reset the clock signal
             digitalWrite(_sck, HIGH);                       // pin to get the next MISO bit
@@ -203,12 +195,12 @@ class BME680_Class {
           *bytePtr++ = reply;                               // Add byte just read to return data
         }                                                   // of for-next each byte to be read
         digitalWrite(_cs, HIGH);                            // Tell BME680 to stop listening
-      }  // of  if-then-else we are using hardware SPI
-    }    // of if-then-else we are using I2C
+      }  
+    }   
     return (structSize);
-  }  // of method getData()
-  template <typename T>
-  uint8_t &putData(const uint8_t addr, const T &value) const {
+  }  
+ 
+  template <typename T> uint8_t &putData(const uint8_t addr, const T &value) const {
     /*!
       @brief     Template for writing to I2C or SPI using any data type
       @details   As a template it can support compile-time data type definitions
@@ -218,16 +210,19 @@ class BME680_Class {
     */
     const uint8_t *bytePtr    = (const uint8_t *)&value;  // Pointer to structure beginning
     static uint8_t structSize = sizeof(T);                // Number of bytes in structure
-    if (_I2CAddress)                                      // Using I2C if address is non-zero
-    {                                                     //
+
+    if (_I2CAddress)  {                                                     
+      // I2C
       Wire.beginTransmission(_I2CAddress);                // Address the I2C device
       Wire.write(addr);                                   // Send register address to write
       for (uint8_t i = 0; i < sizeof(T); i++)
         Wire.write(*bytePtr++);  // loop for each byte to be written
       Wire.endTransmission();    // Close transmission
+
     } else {
-      if (_sck == 0)  // if sck is zero then hardware SPI
-      {
+
+      if (_sck == 0) {
+        // SPI
         SPI.beginTransaction(
             SPISettings(SPI_HERZ, MSBFIRST, SPI_MODE0));  // start the SPI transaction
         digitalWrite(_cs, LOW);                           // Tell BME680 to listen up
@@ -235,10 +230,12 @@ class BME680_Class {
         for (uint8_t i = 0; i < structSize; i++) {
           SPI.transfer(*bytePtr++);
         }                         // loop for each byte to be written
+
         digitalWrite(_cs, HIGH);  // Tell BME680 to stop listening
         SPI.endTransaction();     // End the transaction
-      } else                      // Otherwise soft SPI is used
-      {
+      
+      } else  {
+        // Soft SPI
         int8_t  i, j;                     // Loop variables
         uint8_t reply;                    // return byte for soft SPI transfer
         for (i = 0; i < structSize; i++)  // Loop for each byte to read
@@ -251,8 +248,8 @@ class BME680_Class {
             digitalWrite(_mosi, (addr & ~0x80) & (1 << j));  // set the MOSI pin state
             digitalWrite(_sck, HIGH);                        // reset the clock signal
           }                                                  // of for-next each bit
-          for (j = 7; j >= 0; j--)                           // Now read the data at that byte
-          {
+
+          for (j = 7; j >= 0; j--) {
             reply <<= 1;                               // shift buffer one bit left
             digitalWrite(_sck, LOW);                   // set the clock signal
             digitalWrite(_mosi, *bytePtr & (1 << j));  // set the MOSI pin state
@@ -264,6 +261,7 @@ class BME680_Class {
       }                                                // of  if-then-else we are using hardware SPI
     }                                                  // of if-then-else we are using I2C
     return (structSize);
-  }  // of method putData()
-};   // of BME680 class definition
-#endif
+  }  
+};  
+
+#endif 

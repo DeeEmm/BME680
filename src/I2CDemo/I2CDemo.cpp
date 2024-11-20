@@ -63,12 +63,15 @@ Build numbers follow format: YY MM DD VV Where VV is the incremental daily versi
 Version #               - Description of Change
 ---------------------------------------------------------------------------------------------------
 
+V 1.0.24112001          - Conversion to PlatformIO project
+V 1.0.24111901          - Code Tidy
 V 1.0.24111801          - Forked from https://github.com/Zanduino/BME680 [Version 1.0.3]
 
 
 */
-#include "Arduino.h"
-#include "./DeeEmm_BME680.h"  // Include the BME680 Sensor library
+
+#include <Arduino.h>
+#include "DeeEmm_BME680.h"  // Include the BME680 Sensor library
 
 
 // Declare constants
@@ -76,7 +79,7 @@ const uint32_t SERIAL_SPEED{115200};  ///< Set the baud rate for Serial I/O
 #define I2C_ADDRESS 0x77
 
 
-// Declare BME680 class instance
+// Create BME680 class instance
 BME680_Class BME680;
 
 //Forward function declaration with default value for sea level
